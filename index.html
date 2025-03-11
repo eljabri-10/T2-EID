@@ -24,7 +24,8 @@
         }
         .name {
             position: absolute;
-            bottom: 210px;
+            /* موضع جديد للاسم في منتصف الإطار الزخرفي */
+            bottom: 335px; /* تعديل موضع الاسم للأعلى */
             left: 50%;
             transform: translateX(-50%);
             color: #F7F6DA;
@@ -99,7 +100,7 @@
             nameDisplay.innerText = name;
             
             // ضبط حجم الخط تلقائيًا
-            adjustFontSize(nameDisplay, 300); // 300 هو العرض المحدد للنص
+            adjustFontSize(nameDisplay, 280); // تقليل العرض الأقصى قليلاً
 
             setTimeout(() => {
                 html2canvas(document.getElementById("cardContainer")).then(canvas => {
