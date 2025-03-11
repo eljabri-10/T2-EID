@@ -24,17 +24,14 @@
         }
         .name {
             position: absolute;
-            bottom: 225px; /* موضع الاسم في الإطار المستطيل */
+            bottom: 180px; /* تم رفع الاسم للأعلى */
             left: 50%;
             transform: translateX(-50%);
-            color: #F7F6DA;
-            font-size: 22px; /* حجم الخط الافتراضي */
+            color: #fff;
+            font-size: 36px; /* تكبير الخط ليكون واضحًا */
             font-weight: bold;
-            text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.7);
-            width: 260px;
-            text-align: center;
+            text-shadow: 3px 3px 6px rgba(0, 0, 0, 0.8);
             white-space: nowrap;
-            overflow: hidden;
         }
         .input-container {
             margin: 20px;
@@ -51,11 +48,6 @@
         button:hover {
             background-color: #218838;
         }
-        #loadingMessage {
-            margin-top: 10px;
-            color: #28a745;
-            display: none;
-        }
     </style>
 </head>
 <body>
@@ -64,7 +56,6 @@
         <input type="text" id="employeeName" placeholder="أدخل اسمك">
         <button onclick="generateCard()">تحميل الصورة</button>
     </div>
-    <div id="loadingMessage">جاري توليد البطاقة، الرجاء الانتظار...</div>
 
     <div class="card-container" id="cardContainer">
         <div class="card" id="greetingCard">
@@ -74,44 +65,11 @@
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
     <script>
-        // التأكد من تحميل الصورة الخلفية قبل تصدير البطاقة
-        let bgImageLoaded = false;
-        
         document.addEventListener("DOMContentLoaded", function () {
-            // التحقق من تحميل مكتبة html2canvas
             if (typeof html2canvas === "undefined") {
                 console.error("html2canvas لم يتم تحميله بشكل صحيح");
             }
-            
-            // إنشاء عنصر صورة لتحميل الصورة الخلفية مسبقًا
-            let bgImage = new Image();
-            bgImage.src = 'eid_card.jpg';
-            bgImage.onload = function() {
-                console.log("تم تحميل الصورة الخلفية");
-                bgImageLoaded = true;
-                
-                // تحديث خلفية الحاوية
-                document.getElementById('cardContainer').style.backgroundImage = `url('${bgImage.src}')`;
-            };
-            bgImage.onerror = function() {
-                console.error("خطأ في تحميل الصورة الخلفية");
-                alert("لم يتم العثور على صورة الخلفية. يرجى التأكد من وجود الملف 'eid_card.jpg'");
-            };
         });
-
-        function adjustFontSize(element, maxWidth) {
-            const nameDisplay = element;
-            let fontSize = 22; // حجم الخط الابتدائي
-            const minFontSize = 12; // الحد الأدنى لحجم الخط
-            
-            nameDisplay.style.fontSize = `${fontSize}px`;
-            
-            // تقليل حجم الخط تدريجيًا حتى يناسب العرض المحدد
-            while (nameDisplay.scrollWidth > maxWidth && fontSize > minFontSize) {
-                fontSize -= 1;
-                nameDisplay.style.fontSize = `${fontSize}px`;
-            }
-        }
 
         function generateCard() {
             let name = document.getElementById("employeeName").value.trim();
@@ -120,42 +78,23 @@
                 return;
             }
             
-            // إظهار رسالة التحميل
-            document.getElementById("loadingMessage").style.display = "block";
-            
-            const nameDisplay = document.getElementById("nameDisplay");
-            nameDisplay.innerText = name;
-            
-            // ضبط حجم الخط تلقائيًا
-            adjustFontSize(nameDisplay, 250);
+            document.getElementById("nameDisplay").innerText = name;
 
-            // التأكد من تحميل الصورة الخلفية قبل تصدير البطاقة
-            const checkImageAndExport = () => {
-                if (bgImageLoaded) {
-                    html2canvas(document.getElementById("cardContainer"), {
-                        useCORS: true,
-                        allowTaint: true,
-                        backgroundColor: null
-                    }).then(canvas => {
-                        let link = document.createElement("a");
-                        link.download = `معايدة_${name}.png`;
-                        link.href = canvas.toDataURL("image/png");
-                        document.getElementById("loadingMessage").style.display = "none";
-                        link.click();
-                    }).catch(error => {
-                        console.error("خطأ أثناء توليد الصورة:", error);
-                        document.getElementById("loadingMessage").style.display = "none";
-                        alert("حدث خطأ أثناء توليد الصورة");
-                    });
-                } else {
-                    console.log("في انتظار تحميل الصورة الخلفية...");
-                    setTimeout(checkImageAndExport, 500);
-                }
-            };
-            
-            // بدء عملية التحقق من تحميل الصورة والتصدير
-            checkImageAndExport();
+            setTimeout(() => {
+                html2canvas(document.getElementById("greetingCard"), {
+                    scale: 3, /* تحسين جودة الصورة النهائية */
+                    useCORS: true
+                }).then(canvas => {
+                    let link = document.createElement("a");
+                    link.download = `معايدة_${name}.png`;
+                    link.href = canvas.toDataURL("image/png", 1.0);
+                    link.click();
+                }).catch(error => {
+                    console.error("خطأ أثناء توليد الصورة:", error);
+                });
+            }, 500);
         }
     </script>
 </body>
 </html>
+
