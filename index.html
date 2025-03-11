@@ -22,24 +22,22 @@
         }
         .name {
             position: absolute;
-            /* الموضع بناءً على النسبة بين التصميم السابق (768×960) والتصميم الكبير */
-            /* إذا سبق ووجدتِه بـ top:400px, left:150px في 768×960 */
-            /* نسبة التكبير التقريبية = 4168 / 768 ≈ 5.43 */
-            /* إذن top:400*5.43=2172px, left:150*5.43=814px */
-            top: 3520px; 
-            left: 1850px;
-            transform: none;
+            /* الموضع العمودي */
+            top: 3520px;
+            /* للتمركز أفقيًا في المنتصف */
+            left: 50%;
+            transform: translateX(-50%);
+
             color: #f7f6da;
             font-weight: 500; /* Medium */
             text-shadow: 2px 2px 5px rgba(0,0,0,0.6);
 
-            /* سنبدأ بخط كبير لأن الصورة كبيرة */
-            font-size: 100px; 
+            /* حجم خط ابتدائي أكبر */
+            font-size: 120px; 
             white-space: nowrap;
             overflow: hidden;
 
-            /* للتحكم في حدود النص أفقياً */
-            /* يمكنك تغيير القيمة إذا أردت مساحة عرض أكبر/أصغر */
+            /* الحد الأقصى لعرض النص */
             max-width: 2000px; 
         }
         button {
@@ -75,15 +73,14 @@
     <script>
         /**
          * دالة تصغر حجم النص تلقائيًا بحيث لا يتجاوز العرض المسموح.
-         * - يبدأ بخط كبير (100px مثلاً).
+         * - يبدأ بخط كبير (120px مثلاً).
          * - يتدرج بالنقصان حتى يصل للحد المطلوب أو الحجم الأصغر.
          */
         function adjustFontSize(element, maxWidth) {
-            let fontSize = 100;  // البداية (تتناسب مع الصورة الكبيرة)
+            let fontSize = 120;  // البداية (تتناسب مع الصورة الكبيرة)
             const minFontSize = 24; // أصغر حجم خط ممكن
             const context = document.createElement("canvas").getContext("2d");
 
-            // جرّب الأحجام تدريجياً
             while (fontSize >= minFontSize) {
                 context.font = `500 ${fontSize}px IBM Plex Sans Arabic`; 
                 const textWidth = context.measureText(element.textContent).width;
@@ -103,14 +100,12 @@
                 return;
             }
 
-            // ضع الاسم في العنصر
             const nameDisplay = document.getElementById("nameDisplay");
             nameDisplay.textContent = name;
 
             // صغّر الخط إذا تجاوز الاسم العرض المحدد (2000px مثلاً)
             adjustFontSize(nameDisplay, 2000);
 
-            // جهز العنصر المراد تصويره
             const card = document.getElementById("greetingCard");
 
             // تأكد من أن الصورة eid_card.jpg موجودة في نفس المجلد
@@ -121,7 +116,7 @@
                 // انتظر نصف ثانية لضمان رسم النص بالحجم النهائي
                 setTimeout(() => {
                     html2canvas(card, {
-                        scale: 2, // لو أردت دقة أعلى، يمكن زيادتها، لكن ستزيد حجم الصورة
+                        scale: 2,
                         useCORS: true,
                         allowTaint: true
                     }).then(canvas => {
@@ -142,6 +137,7 @@
     </script>
 </body>
 </html>
+
 
 
 
