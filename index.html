@@ -14,8 +14,8 @@
     .preview-container {
       /* عرض صغير للمعاينة فقط */
       position: relative;
-      width: 400px;   /* مثال: 400 عرض */
-      height: 500px;  /* مثال: 500 ارتفاع */
+      width: 400px;
+      height: 500px;
       margin: 20px auto;
       background: url('eid_card.jpg') center center no-repeat;
       background-size: cover;
@@ -33,18 +33,18 @@
       white-space: nowrap;
     }
 
-    /* الحاوية الكبيرة المخفية (الأبعاد الكاملة) */
+    /* الحاوية الكبيرة: نخفيها بنقلها خارج الشاشة بدلاً من display:none */
     .full-container {
-      position: relative;
+      position: absolute;
+      top: -9999px;    /* إبعاد الحاوية */
+      left: -9999px;   /* إلى خارج حدود الشاشة */
       width: 4168px;
       height: 5209px;
       background: url('eid_card.jpg') center center no-repeat;
       background-size: cover;
-      display: none;  /* نخفيها عن العرض */
     }
     .full-name {
       position: absolute;
-      /* عدّل هذه القيم حسب احتياجك داخل التصميم الكبير */
       top: 3520px;
       left: 50%;
       transform: translateX(-50%);
@@ -86,14 +86,13 @@
     <div class="preview-name" id="previewName">اسم الموظف</div>
   </div>
 
-  <!-- الحاوية الكبيرة المخفية (هي التي سنصورها بجودة عالية) -->
+  <!-- الحاوية الكبيرة (نخفيها بإبعادها خارج الشاشة) -->
   <div class="full-container" id="fullContainer">
     <div class="full-name" id="fullName">اسم الموظف</div>
   </div>
 
   <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
   <script>
-    // دالة ضبط حجم الخط التلقائي للحاوية الكبيرة
     function adjustFontSize(element, maxWidth) {
       let fontSize = 120;  
       const minFontSize = 12; 
@@ -109,28 +108,22 @@
     }
 
     function generateCard() {
-      const nameInput = document.getElementById("employeeName");
-      const nameValue = nameInput.value.trim();
+      const nameValue = document.getElementById("employeeName").value.trim();
       if (!nameValue) {
         alert("الرجاء إدخال اسمك!");
         return;
       }
 
-      // 1) ضع الاسم في معاينة العرض (صغيرة)
-      const previewName = document.getElementById("previewName");
-      previewName.textContent = nameValue;
+      // 1) ضع الاسم في المعاينة المصغرة
+      document.getElementById("previewName").textContent = nameValue;
 
-      // 2) ضع الاسم في الحاوية الكبيرة المخفية
-      const fullName = document.getElementById("fullName");
-      fullName.textContent = nameValue;
+      // 2) ضع الاسم في الحاوية الكبيرة
+      const fullNameElem = document.getElementById("fullName");
+      fullNameElem.textContent = nameValue;
+      adjustFontSize(fullNameElem, 2000); // صغّر الخط إذا الاسم طويل
 
-      // صغّر الخط في الحاوية الكبيرة إذا الاسم طويل
-      adjustFontSize(fullName, 2000);
-
-      // التقط صورة الحاوية الكبيرة
+      // 3) التقط صورة الحاوية الكبيرة
       const fullContainer = document.getElementById("fullContainer");
-
-      // انتظر قليلاً ليرسم النص قبل الالتقاط
       setTimeout(() => {
         html2canvas(fullContainer, {
           scale: 2, 
@@ -150,6 +143,7 @@
   </script>
 </body>
 </html>
+
 
 
 
