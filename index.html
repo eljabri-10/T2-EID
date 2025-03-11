@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>بطاقة المعايدة</title>
+    <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            text-align: center;
+            font-family: 'IBM Plex Sans Arabic', sans-serif;
+            background-color: #f4f4f4;
+        }
+        .container {
+            margin-top: 20px;
+        }
+        .card-container {
+            position: relative;
+            width: 768px;
+            height: 960px;
+            margin: auto;
+            background: url('eid_card.jpg') no-repeat center center;
+            background-size: cover;
+        }
+        .name {
+            position: absolute;
+            bottom: 120px;
+            left: 50%;
+            transform: translateX(-50%);
+            color: #fff;
+            font-size: 32px;
+            font-weight: bold;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.7);
+        }
+        .input-container {
+            margin: 20px;
+        }
+        button {
+            padding: 10px 20px;
+            font-size: 16px;
+            background-color: #28a745;
+            color: white;
+            border: none;
+            cursor: pointer;
+            border-radius: 5px;
+        }
+        button:hover {
+            background-color: #218838;
+        }
+    </style>
+</head>
+<body>
+    <h2>أدخل اسمك لتحميل بطاقة المعايدة</h2>
+    <div class="input-container">
+        <input type="text" id="employeeName" placeholder="أدخل اسمك">
+        <button onclick="generateCard()">تحميل الصورة</button>
+    </div>
+
+    <div class="card-container" id="cardContainer">
+        <div class="card" id="greetingCard">
+            <div class="name" id="nameDisplay">اسم الموظف</div>
+        </div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            if (typeof html2canvas === "undefined") {
+                console.error("html2canvas لم يتم تحميله بشكل صحيح");
+            }
+        });
+
+        function generateCard() {
+            let name = document.getElementById("employeeName").value.trim();
+            if (name === "") {
+                alert("الرجاء إدخال اسمك!");
+                return;
+            }
+            
+            document.getElementById("nameDisplay").innerText = name;
+
+            setTimeout(() => {
+                html2canvas(document.getElementById("greetingCard")).then(canvas => {
+                    let link = document.createElement("a");
+                    link.download = `معايدة_${name}.png`;
+                    link.href = canvas.toDataURL();
+                    link.click();
+                }).catch(error => {
+                    console.error("خطأ أثناء توليد الصورة:", error);
+                });
+            }, 500);
+        }
+    </script>
+</body>
+</html>
