@@ -1,145 +1,155 @@
 <!DOCTYPE html>
 <html lang="ar">
 <head>
-    <meta charset="UTF-8">
-    <title>بطاقة المعايدة بالحجم الكبير</title>
-    <!-- خط IBM Plex Sans Arabic بوزن 500 (Medium) -->
-    <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@500&display=swap" rel="stylesheet">
-    <style>
-        body {
-            text-align: center;
-            font-family: 'IBM Plex Sans Arabic', sans-serif;
-            background-color: #f4f4f4;
-        }
-        /* البطاقة بأبعادها الأصلية: 4168×5209 */
-        .card-container {
-            position: relative;
-            width: 4168px;
-            height: 5209px;
-            margin: 20px auto;
-            background: url('eid_card.jpg') center center no-repeat;
-            background-size: cover;
-        }
-        .name {
-            position: absolute;
-            /* الموضع العمودي */
-            top: 3520px;
-            /* للتمركز أفقيًا في المنتصف */
-            left: 50%;
-            transform: translateX(-50%);
+  <meta charset="UTF-8">
+  <title>بطاقة المعايدة</title>
+  <!-- خط IBM Plex Sans Arabic -->
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@500&display=swap" rel="stylesheet">
+  <style>
+    body {
+      text-align: center;
+      font-family: 'IBM Plex Sans Arabic', sans-serif;
+      background-color: #f4f4f4;
+    }
+    .preview-container {
+      /* عرض صغير للمعاينة فقط */
+      position: relative;
+      width: 400px;   /* مثال: 400 عرض */
+      height: 500px;  /* مثال: 500 ارتفاع */
+      margin: 20px auto;
+      background: url('eid_card.jpg') center center no-repeat;
+      background-size: cover;
+      border: 2px solid #ccc;
+    }
+    .preview-name {
+      position: absolute;
+      bottom: 50px;
+      left: 50%;
+      transform: translateX(-50%);
+      color: #f7f6da;
+      font-size: 24px;
+      font-weight: 500;
+      text-shadow: 1px 1px 3px rgba(0,0,0,0.6);
+      white-space: nowrap;
+    }
 
-            color: #f7f6da;
-            font-weight: 500; /* Medium */
-            text-shadow: 2px 2px 5px rgba(0,0,0,0.6);
+    /* الحاوية الكبيرة المخفية (الأبعاد الكاملة) */
+    .full-container {
+      position: relative;
+      width: 4168px;
+      height: 5209px;
+      background: url('eid_card.jpg') center center no-repeat;
+      background-size: cover;
+      display: none;  /* نخفيها عن العرض */
+    }
+    .full-name {
+      position: absolute;
+      /* عدّل هذه القيم حسب احتياجك داخل التصميم الكبير */
+      top: 3520px;
+      left: 50%;
+      transform: translateX(-50%);
+      color: #f7f6da;
+      font-weight: 500;
+      text-shadow: 2px 2px 5px rgba(0,0,0,0.6);
+      font-size: 120px; 
+      white-space: nowrap;
+      overflow: hidden;
+      max-width: 2000px; 
+    }
 
-            /* حجم خط ابتدائي أكبر */
-            font-size: 120px; 
-            white-space: nowrap;
-            overflow: hidden;
-
-            /* الحد الأقصى لعرض النص */
-            max-width: 2000px; 
-        }
-        button {
-            padding: 10px 20px;
-            font-size: 16px;
-            background-color: #28a745;
-            color: white;
-            border: none;
-            cursor: pointer;
-            border-radius: 5px;
-            margin-top: 15px;
-        }
-        input {
-            padding: 10px;
-            font-size: 16px;
-            width: 200px;
-            border-radius: 5px;
-            border: 1px solid #ccc;
-        }
-    </style>
+    button {
+      padding: 10px 20px;
+      font-size: 16px;
+      background-color: #28a745;
+      color: white;
+      border: none;
+      cursor: pointer;
+      border-radius: 5px;
+      margin-top: 15px;
+    }
+    input {
+      padding: 10px;
+      font-size: 16px;
+      width: 200px;
+      border-radius: 5px;
+      border: 1px solid #ccc;
+    }
+  </style>
 </head>
 <body>
-    <h2>أدخل اسمك لتحميل بطاقة المعايدة</h2>
-    <input type="text" id="employeeName" placeholder="أدخل اسمك">
-    <button onclick="generateCard()">تحميل الصورة</button>
+  <h2>أدخل اسمك لتحميل بطاقة المعايدة</h2>
+  <input type="text" id="employeeName" placeholder="أدخل اسمك">
+  <button onclick="generateCard()">تحميل الصورة</button>
 
-    <div class="card-container" id="greetingCard">
-        <div class="name" id="nameDisplay">اسم الموظف</div>
-    </div>
+  <!-- حاوية المعاينة المصغرة -->
+  <div class="preview-container" id="previewContainer">
+    <div class="preview-name" id="previewName">اسم الموظف</div>
+  </div>
 
-    <!-- مكتبة html2canvas -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
-    <script>
-        /**
-         * دالة تصغر حجم النص تلقائيًا بحيث لا يتجاوز العرض المسموح.
-         * - يبدأ بخط كبير (120px مثلاً).
-         * - يتدرج بالنقصان حتى يصل للحد المطلوب أو الحجم الأصغر.
-         */
-        function adjustFontSize(element, maxWidth) {
-            let fontSize = 120;  // البداية (تتناسب مع الصورة الكبيرة)
-            const minFontSize = 24; // أصغر حجم خط ممكن
-            const context = document.createElement("canvas").getContext("2d");
+  <!-- الحاوية الكبيرة المخفية (هي التي سنصورها بجودة عالية) -->
+  <div class="full-container" id="fullContainer">
+    <div class="full-name" id="fullName">اسم الموظف</div>
+  </div>
 
-            while (fontSize >= minFontSize) {
-                context.font = `500 ${fontSize}px IBM Plex Sans Arabic`; 
-                const textWidth = context.measureText(element.textContent).width;
-                // إذا كان عرض النص أقل من maxWidth، اخرج من الحلقة
-                if (textWidth <= maxWidth) {
-                    break;
-                }
-                fontSize--;
-            }
-            element.style.fontSize = fontSize + 'px';
-        }
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+  <script>
+    // دالة ضبط حجم الخط التلقائي للحاوية الكبيرة
+    function adjustFontSize(element, maxWidth) {
+      let fontSize = 120;  
+      const minFontSize = 12; 
+      const context = document.createElement("canvas").getContext("2d");
 
-        function generateCard() {
-            const name = document.getElementById("employeeName").value.trim();
-            if (!name) {
-                alert("أدخل الاسم من فضلك");
-                return;
-            }
+      while (fontSize >= minFontSize) {
+        context.font = `500 ${fontSize}px IBM Plex Sans Arabic`;
+        const textWidth = context.measureText(element.textContent).width;
+        if (textWidth <= maxWidth) break;
+        fontSize--;
+      }
+      element.style.fontSize = fontSize + 'px';
+    }
 
-            const nameDisplay = document.getElementById("nameDisplay");
-            nameDisplay.textContent = name;
+    function generateCard() {
+      const nameInput = document.getElementById("employeeName");
+      const nameValue = nameInput.value.trim();
+      if (!nameValue) {
+        alert("الرجاء إدخال اسمك!");
+        return;
+      }
 
-            // صغّر الخط إذا تجاوز الاسم العرض المحدد (2000px مثلاً)
-            adjustFontSize(nameDisplay, 2000);
+      // 1) ضع الاسم في معاينة العرض (صغيرة)
+      const previewName = document.getElementById("previewName");
+      previewName.textContent = nameValue;
 
-            const card = document.getElementById("greetingCard");
+      // 2) ضع الاسم في الحاوية الكبيرة المخفية
+      const fullName = document.getElementById("fullName");
+      fullName.textContent = nameValue;
 
-            // تأكد من أن الصورة eid_card.jpg موجودة في نفس المجلد
-            const img = new Image();
-            img.crossOrigin = "anonymous";
-            img.src = "eid_card.jpg";
-            img.onload = function() {
-                // انتظر نصف ثانية لضمان رسم النص بالحجم النهائي
-                setTimeout(() => {
-                    html2canvas(card, {
-                        scale: 2,
-                        useCORS: true,
-                        allowTaint: true
-                    }).then(canvas => {
-                        const link = document.createElement('a');
-                        link.download = `معايدة_${name}.png`;
-                        link.href = canvas.toDataURL("image/png");
-                        link.click();
-                    }).catch(error => {
-                        console.error("حدث خطأ:", error);
-                        alert("حدث خطأ أثناء تحميل الصورة.");
-                    });
-                }, 500);
-            };
-            img.onerror = function() {
-                alert("تأكد من وجود الصورة باسم eid_card.jpg بنفس المجلد.");
-            };
-        }
-    </script>
+      // صغّر الخط في الحاوية الكبيرة إذا الاسم طويل
+      adjustFontSize(fullName, 2000);
+
+      // التقط صورة الحاوية الكبيرة
+      const fullContainer = document.getElementById("fullContainer");
+
+      // انتظر قليلاً ليرسم النص قبل الالتقاط
+      setTimeout(() => {
+        html2canvas(fullContainer, {
+          scale: 2, 
+          useCORS: true,
+          allowTaint: true
+        }).then(canvas => {
+          const link = document.createElement('a');
+          link.download = `معايدة_${nameValue}.png`;
+          link.href = canvas.toDataURL("image/png");
+          link.click();
+        }).catch(error => {
+          console.error("حدث خطأ:", error);
+          alert("حدث خطأ أثناء تحميل الصورة.");
+        });
+      }, 300);
+    }
+  </script>
 </body>
 </html>
-
-
-
 
 
 
