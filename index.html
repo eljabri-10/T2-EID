@@ -21,14 +21,16 @@
         }
         .name {
             position: absolute;
-            bottom: 330px; /* تم ضبط الإحداثيات بدقة (داخل الإطار) */
+            bottom: 340px; /* تعديل الموقع بدقة */
             left: 50%;
             transform: translateX(-50%);
             color: #f7f6da; /* اللون المطلوب */
-            font-size: 46px; /* حجم واضح جداً */
             font-weight: 700;
-            text-shadow: 2px 2px 5px rgba(0,0,0,0.6);
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.8);
+            width: 500px; /* عرض الإطار */
+            font-size: 38px; /* حجم افتراضي */
             white-space: nowrap;
+            overflow: hidden;
         }
         button {
             padding: 10px 20px;
@@ -53,24 +55,73 @@
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
     <script>
+        function adjustFontSize(textElement) {
+            const maxWidth = 500; // عرض الإطار المسموح
+            let fontSize = 44; // حجم الخط الافتراضي
+            textWidth = text => {
+                const canvas = document.createElement("canvas");
+                const context = canvas.getContext("2d");
+                context = canvas.getContext("2d");
+                context.font = `700 ${fontSize}px IBM Plex Sans Arabic`;
+                return context.measureText(text).width;
+            };
+            
+            let text = textContent = textContent.trim();
+            let fontSize = 44; // الحجم الافتراضي
+
+            while (textWidth(text, fontSize) > 400 && fontSize > 20) {
+                fontSize -= 1;
+            }
+
+            return fontSize;
+        }
+
+        function adjustFontSize(element) {
+            let maxWidth = 600; // عرض الإطار
+            let fontSize = 44; // الحجم الافتراضي الكبير
+            const context = document.createElement("canvas").getContext("2d");
+            context.font = `700 ${fontSize}px IBM Plex Sans Arabic`;
+            let textWidth = context.measureText(element.textContent).width;
+
+            while (textWidth > 400 && fontSize > 20) { // 400px عرض الإطار
+                fontSize--;
+                context.font = `700 ${fontSize}px IBM Plex Sans Arabic`;
+                textWidth = context.measureText(element.textContent).width;
+            }
+
+            return fontSize;
+        }
+
         function generateCard() {
             const name = document.getElementById("employeeName").value.trim();
             if (!name) {
                 alert("أدخل الاسم من فضلك");
                 return;
             }
-            document.getElementById("nameDisplay").textContent = name;
 
-            const card = document.querySelector("#greetingCard");
+            const nameDisplay = document.getElementById("nameDisplay");
+            nameDisplay.textContent = name;
 
-            // تحميل الصورة مسبقاً لضمان جودة الالتقاط
+            // تصغير حجم النص إذا كان طويلاً
+            let fontSize = 44; // الحجم الكبير
+            const context = document.createElement("canvas").getContext("2d");
+            context.font = `700 ${fontSize}px IBM Plex Sans Arabic`;
+            let textWidth = context.measureText(name).width;
+            while (textWidth > 500 && fontSize > 20) { // 500 هو عرض الإطار تقريبًا
+                fontSize -= 2;
+                context.font = `700 ${fontSize}px IBM Plex Sans Arabic`;
+                textWidth = context.measureText(name).width;
+            }
+            nameDisplay.style.fontSize = fontSize + 'px';
+
+            const card = document.getElementById("greetingCard");
             const img = new Image();
             img.crossOrigin = "anonymous";
             img.src = "eid_card.jpg";
             img.onload = function() {
                 setTimeout(() => {
                     html2canvas(card, {
-                        scale: 3, // جودة عالية جداً
+                        scale: 2,
                         useCORS: true,
                         allowTaint: true
                     }).then(canvas => {
@@ -92,5 +143,6 @@
     </script>
 </body>
 </html>
+
 
 
