@@ -15,18 +15,19 @@
             width: 768px;
             height: 960px;
             margin: 20px auto;
-            background: url('eid_card.jpg') no-repeat center center;
+            background-image: url('eid_card.jpg');
             background-size: cover;
+            background-position: center;
         }
         .name {
             position: absolute;
-            bottom: 240px; /* تعديل دقيق: رفع الاسم إلى داخل الإطار */
+            bottom: 330px; /* تم ضبط الإحداثيات بدقة (داخل الإطار) */
             left: 50%;
             transform: translateX(-50%);
-            color: #fff;
-            font-size: 42px; /* تكبير حجم الاسم ليكون واضحًا جدًا */
+            color: #f7f6da; /* اللون المطلوب */
+            font-size: 46px; /* حجم واضح جداً */
             font-weight: 700;
-            text-shadow: 1px 1px 3px rgba(0,0,0,0.6);
+            text-shadow: 2px 2px 5px rgba(0,0,0,0.6);
             white-space: nowrap;
         }
         button {
@@ -60,19 +61,36 @@
             }
             document.getElementById("nameDisplay").textContent = name;
 
-            setTimeout(() => {
-                html2canvas(document.querySelector("#greetingCard"), {
-                    scale: window.devicePixelRatio * 2, // أفضل طريقة للحصول على جودة عالية
-                    useCORS: true
-                }).then(canvas => {
-                    const link = document.createElement('a');
-                    link.download = `معايدة_${name}.png`;
-                    link.href = canvas.toDataURL("image/png");
-                    link.click();
-                });
-            }, 600);
+            const card = document.querySelector("#greetingCard");
+
+            // تحميل الصورة مسبقاً لضمان جودة الالتقاط
+            const img = new Image();
+            img.crossOrigin = "anonymous";
+            img.src = "eid_card.jpg";
+            img.onload = function() {
+                setTimeout(() => {
+                    html2canvas(card, {
+                        scale: 3, // جودة عالية جداً
+                        useCORS: true,
+                        allowTaint: true
+                    }).then(canvas => {
+                        const link = document.createElement('a');
+                        link.download = `معايدة_${name}.png`;
+                        link.href = canvas.toDataURL("image/png");
+                        link.click();
+                    }).catch(error => {
+                        console.error("حدث خطأ:", error);
+                        alert("حدث خطأ أثناء تحميل الصورة.");
+                    });
+                }, 500);
+            };
+
+            img.onerror = function() {
+                alert("تأكد من وجود صورة البطاقة في نفس المجلد باسم eid_card.jpg");
+            };
         }
     </script>
 </body>
 </html>
+
 
