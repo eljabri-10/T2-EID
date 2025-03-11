@@ -1,81 +1,148 @@
 <!DOCTYPE html>
-<html>
+<html lang="ar">
 <head>
     <meta charset="UTF-8">
-    <title>معاينة موضع الاسم</title>
+    <title>بطاقة المعايدة بالحجم الكبير</title>
+    <!-- خط IBM Plex Sans Arabic بوزن 500 (Medium) -->
+    <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@500&display=swap" rel="stylesheet">
     <style>
+        body {
+            text-align: center;
+            font-family: 'IBM Plex Sans Arabic', sans-serif;
+            background-color: #f4f4f4;
+        }
+        /* البطاقة بأبعادها الأصلية: 4168×5209 */
         .card-container {
             position: relative;
-            width: 768px;
-            height: 960px;
+            width: 4168px;
+            height: 5209px;
             margin: 20px auto;
             background: url('eid_card.jpg') center center no-repeat;
             background-size: cover;
         }
-        .draggable-name {
+        .name {
             position: absolute;
-            top: 400px; /* قيمة ابتدائية */
-            left: 150px; /* قيمة ابتدائية */
-            color: red;
-            font-size: 36px;
-            font-weight: bold;
-            cursor: move; /* مؤشر السحب */
+            /* الموضع بناءً على النسبة بين التصميم السابق (768×960) والتصميم الكبير */
+            /* إذا سبق ووجدتِه بـ top:400px, left:150px في 768×960 */
+            /* نسبة التكبير التقريبية = 4168 / 768 ≈ 5.43 */
+            /* إذن top:400*5.43=2172px, left:150*5.43=814px */
+            top: 2172px; 
+            left: 814px;
+            transform: none;
+            color: #f7f6da;
+            font-weight: 500; /* Medium */
+            text-shadow: 2px 2px 5px rgba(0,0,0,0.6);
+
+            /* سنبدأ بخط كبير لأن الصورة كبيرة */
+            font-size: 100px; 
+            white-space: nowrap;
+            overflow: hidden;
+
+            /* للتحكم في حدود النص أفقياً */
+            /* يمكنك تغيير القيمة إذا أردت مساحة عرض أكبر/أصغر */
+            max-width: 2000px; 
+        }
+        button {
+            padding: 10px 20px;
+            font-size: 16px;
+            background-color: #28a745;
+            color: white;
+            border: none;
+            cursor: pointer;
+            border-radius: 5px;
+            margin-top: 15px;
+        }
+        input {
+            padding: 10px;
+            font-size: 16px;
+            width: 200px;
+            border-radius: 5px;
+            border: 1px solid #ccc;
         }
     </style>
 </head>
 <body>
-    <h2>اسحب النص وضعه في المكان المناسب داخل التصميم</h2>
-    <p>بعدما تنتهي، افتح الـConsole في المتصفح لمعرفة القيم التي يجب وضعها في الكود النهائي.</p>
+    <h2>أدخل اسمك لتحميل بطاقة المعايدة</h2>
+    <input type="text" id="employeeName" placeholder="أدخل اسمك">
+    <button onclick="generateCard()">تحميل الصورة</button>
 
-    <div class="card-container" id="cardContainer">
-        <div class="draggable-name" id="draggableName">النص التجريبي</div>
+    <div class="card-container" id="greetingCard">
+        <div class="name" id="nameDisplay">اسم الموظف</div>
     </div>
 
+    <!-- مكتبة html2canvas -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
     <script>
-        const draggableName = document.getElementById("draggableName");
-        let offsetX, offsetY;
-        let isDragging = false;
+        /**
+         * دالة تصغر حجم النص تلقائيًا بحيث لا يتجاوز العرض المسموح.
+         * - يبدأ بخط كبير (100px مثلاً).
+         * - يتدرج بالنقصان حتى يصل للحد المطلوب أو الحجم الأصغر.
+         */
+        function adjustFontSize(element, maxWidth) {
+            let fontSize = 100;  // البداية (تتناسب مع الصورة الكبيرة)
+            const minFontSize = 24; // أصغر حجم خط ممكن
+            const context = document.createElement("canvas").getContext("2d");
 
-        draggableName.addEventListener("mousedown", (e) => {
-            isDragging = true;
-            // حساب الإزاحة داخل العنصر
-            offsetX = e.offsetX;
-            offsetY = e.offsetY;
-        });
-
-        document.addEventListener("mousemove", (e) => {
-            if (isDragging) {
-                // حساب الموضع الجديد
-                const rect = document.getElementById("cardContainer").getBoundingClientRect();
-                let newLeft = e.clientX - rect.left - offsetX;
-                let newTop = e.clientY - rect.top - offsetY;
-
-                // تثبيت العنصر داخل حدود البطاقة
-                if (newLeft < 0) newLeft = 0;
-                if (newTop < 0) newTop = 0;
-                if (newLeft > (rect.width - draggableName.offsetWidth)) {
-                    newLeft = rect.width - draggableName.offsetWidth;
+            // جرّب الأحجام تدريجياً
+            while (fontSize >= minFontSize) {
+                context.font = `500 ${fontSize}px IBM Plex Sans Arabic`; 
+                const textWidth = context.measureText(element.textContent).width;
+                // إذا كان عرض النص أقل من maxWidth، اخرج من الحلقة
+                if (textWidth <= maxWidth) {
+                    break;
                 }
-                if (newTop > (rect.height - draggableName.offsetHeight)) {
-                    newTop = rect.height - draggableName.offsetHeight;
-                }
-
-                draggableName.style.left = `${newLeft}px`;
-                draggableName.style.top = `${newTop}px`;
+                fontSize--;
             }
-        });
+            element.style.fontSize = fontSize + 'px';
+        }
 
-        document.addEventListener("mouseup", () => {
-            if (isDragging) {
-                isDragging = false;
-                // عند إفلات العنصر، اطبع القيم في الـConsole
-                console.log("top:", draggableName.style.top);
-                console.log("left:", draggableName.style.left);
+        function generateCard() {
+            const name = document.getElementById("employeeName").value.trim();
+            if (!name) {
+                alert("أدخل الاسم من فضلك");
+                return;
             }
-        });
+
+            // ضع الاسم في العنصر
+            const nameDisplay = document.getElementById("nameDisplay");
+            nameDisplay.textContent = name;
+
+            // صغّر الخط إذا تجاوز الاسم العرض المحدد (2000px مثلاً)
+            adjustFontSize(nameDisplay, 2000);
+
+            // جهز العنصر المراد تصويره
+            const card = document.getElementById("greetingCard");
+
+            // تأكد من أن الصورة eid_card.jpg موجودة في نفس المجلد
+            const img = new Image();
+            img.crossOrigin = "anonymous";
+            img.src = "eid_card.jpg";
+            img.onload = function() {
+                // انتظر نصف ثانية لضمان رسم النص بالحجم النهائي
+                setTimeout(() => {
+                    html2canvas(card, {
+                        scale: 2, // لو أردت دقة أعلى، يمكن زيادتها، لكن ستزيد حجم الصورة
+                        useCORS: true,
+                        allowTaint: true
+                    }).then(canvas => {
+                        const link = document.createElement('a');
+                        link.download = `معايدة_${name}.png`;
+                        link.href = canvas.toDataURL("image/png");
+                        link.click();
+                    }).catch(error => {
+                        console.error("حدث خطأ:", error);
+                        alert("حدث خطأ أثناء تحميل الصورة.");
+                    });
+                }, 500);
+            };
+            img.onerror = function() {
+                alert("تأكد من وجود الصورة باسم eid_card.jpg بنفس المجلد.");
+            };
+        }
     </script>
 </body>
 </html>
+
 
 
 
