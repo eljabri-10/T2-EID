@@ -2,39 +2,32 @@
 <html lang="ar">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>بطاقة المعايدة</title>
-    <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@400;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@700&display=swap" rel="stylesheet">
     <style>
         body {
             text-align: center;
             font-family: 'IBM Plex Sans Arabic', sans-serif;
             background-color: #f4f4f4;
         }
-        .container {
-            margin-top: 20px;
-        }
         .card-container {
             position: relative;
             width: 768px;
             height: 960px;
-            margin: auto;
+            margin: 20px auto;
             background: url('eid_card.jpg') no-repeat center center;
             background-size: cover;
         }
         .name {
             position: absolute;
-            bottom: 180px; /* تم رفع الاسم للأعلى */
+            bottom: 240px; /* تعديل دقيق: رفع الاسم إلى داخل الإطار */
             left: 50%;
             transform: translateX(-50%);
             color: #fff;
-            font-size: 36px; /* تكبير الخط ليكون واضحًا */
-            font-weight: bold;
-            text-shadow: 3px 3px 6px rgba(0, 0, 0, 0.8);
+            font-size: 42px; /* تكبير حجم الاسم ليكون واضحًا جدًا */
+            font-weight: 700;
+            text-shadow: 1px 1px 3px rgba(0,0,0,0.6);
             white-space: nowrap;
-        }
-        .input-container {
-            margin: 20px;
         }
         button {
             padding: 10px 20px;
@@ -44,55 +37,40 @@
             border: none;
             cursor: pointer;
             border-radius: 5px;
-        }
-        button:hover {
-            background-color: #218838;
+            margin-top: 15px;
         }
     </style>
 </head>
 <body>
     <h2>أدخل اسمك لتحميل بطاقة المعايدة</h2>
-    <div class="input-container">
-        <input type="text" id="employeeName" placeholder="أدخل اسمك">
-        <button onclick="generateCard()">تحميل الصورة</button>
-    </div>
+    <input type="text" id="employeeName" placeholder="أدخل اسمك">
+    <button onclick="generateCard()">تحميل الصورة</button>
 
-    <div class="card-container" id="cardContainer">
-        <div class="card" id="greetingCard">
-            <div class="name" id="nameDisplay">اسم الموظف</div>
-        </div>
+    <div class="card-container" id="greetingCard">
+        <div class="name" id="nameDisplay">اسم الموظف</div>
     </div>
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
     <script>
-        document.addEventListener("DOMContentLoaded", function () {
-            if (typeof html2canvas === "undefined") {
-                console.error("html2canvas لم يتم تحميله بشكل صحيح");
-            }
-        });
-
         function generateCard() {
-            let name = document.getElementById("employeeName").value.trim();
-            if (name === "") {
-                alert("الرجاء إدخال اسمك!");
+            const name = document.getElementById("employeeName").value.trim();
+            if (!name) {
+                alert("أدخل الاسم من فضلك");
                 return;
             }
-            
-            document.getElementById("nameDisplay").innerText = name;
+            document.getElementById("nameDisplay").textContent = name;
 
             setTimeout(() => {
-                html2canvas(document.getElementById("greetingCard"), {
-                    scale: 3, /* تحسين جودة الصورة النهائية */
+                html2canvas(document.querySelector("#greetingCard"), {
+                    scale: window.devicePixelRatio * 2, // أفضل طريقة للحصول على جودة عالية
                     useCORS: true
                 }).then(canvas => {
-                    let link = document.createElement("a");
+                    const link = document.createElement('a');
                     link.download = `معايدة_${name}.png`;
-                    link.href = canvas.toDataURL("image/png", 1.0);
+                    link.href = canvas.toDataURL("image/png");
                     link.click();
-                }).catch(error => {
-                    console.error("خطأ أثناء توليد الصورة:", error);
                 });
-            }, 500);
+            }, 600);
         }
     </script>
 </body>
