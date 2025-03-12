@@ -2,78 +2,129 @@
 <html lang="ar">
 <head>
   <meta charset="UTF-8">
-  <title>بطاقة المعايدة (مخفية)</title>
+  <title>بطاقة المعايدة</title>
   <!-- خط IBM Plex Sans Arabic -->
   <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@500&display=swap" rel="stylesheet">
   <style>
-    body {
-      text-align: center;
+    /* إعدادات الصفحة العامة */
+    html, body {
+      margin: 0;
+      padding: 0;
+      height: 100%; /* لتمكين الـflex العمودي */
+      background-color: #161616; /* اللون الخلفي الداكن */
+      color: #fff; /* النص أبيض */
       font-family: 'IBM Plex Sans Arabic', sans-serif;
-      background-color: #f4f4f4;
+      text-align: center;
     }
-    /* الحاوية الكبيرة مخفية تمامًا عن واجهة المستخدم */
-    .hidden-container {
-      position: absolute;
-      top: -9999px;   /* إبعاد الحاوية خارج الشاشة */
-      left: -9999px;
-      width: 4168px;  /* عرض التصميم الأصلي */
-      height: 5209px; /* ارتفاع التصميم الأصلي */
-      background: url('eid_card.jpg') center center no-repeat;
-      background-size: cover;
+
+    /* الحاوية الرئيسية التي ستتمركز وسط الصفحة */
+    .main-container {
+      display: flex;
+      flex-direction: column;      /* ترتيب عمودي */
+      align-items: center;         /* توسيط أفقي */
+      justify-content: center;     /* توسيط عمودي */
+      height: 100vh;               /* تملأ طول الصفحة كاملة */
     }
-    /* عنصر الاسم داخل التصميم */
-    .name {
-      position: absolute;
-      top: 3520px; /* عدّل للأعلى/الأسفل حسب رغبتك */
-      left: 50%;
-      transform: translateX(-50%);
-      color: #f7f6da;
-      font-weight: 500; 
-      text-shadow: 2px 2px 5px rgba(0,0,0,0.6);
-      font-size: 120px;  /* حجم ابتدائي */
-      white-space: nowrap;
-      overflow: hidden;
-      max-width: 2000px; 
+
+    /* الشعار */
+    .company-logo {
+      height: 60px;
+      margin-bottom: 20px; /* مسافة أسفل الشعار */
     }
-    /* أزرار وحقل إدخال */
-    button {
-      padding: 10px 20px;
+
+    h2 {
+      margin: 0 0 15px 0;
+    }
+
+    /* عنصر الإدخال والزر في كتلة عمودية واحدة */
+    .input-group {
+      display: flex;
+      flex-direction: column; /* ترتيب رأسي بدلاً من أفقي */
+      gap: 10px;              /* مسافة بين العناصر */
+      width: 100%;
+      max-width: 300px;       /* لجعل الإدخال والزر بعرض محدد */
+    }
+
+    input[type="text"] {
+      padding: 12px 15px;
       font-size: 16px;
-      background-color: #28a745;
-      color: white;
+      border-radius: 5px;
+      border: 1px solid #ccc;
+      outline: none;
+      transition: border-color 0.3s;
+      text-align: center;       /* لجعل النص في المنتصف داخليًا */
+    }
+    input[type="text"]:focus {
+      border-color: #f7f6da;
+    }
+
+    button {
+      padding: 12px 20px;
+      font-size: 16px;
+      background-color: #f7f6da;
+      color: #000;
       border: none;
       cursor: pointer;
       border-radius: 5px;
-      margin-top: 15px;
+      transition: background-color 0.3s, transform 0.2s;
     }
-    input {
-      padding: 10px;
-      font-size: 16px;
-      width: 200px;
-      border-radius: 5px;
-      border: 1px solid #ccc;
-      margin-top: 20px;
+    button:hover {
+      background-color: #e3e2c8;
+      transform: scale(1.02);
+    }
+    button:active {
+      transform: scale(1);
+    }
+
+    /* الحاوية الكبيرة المخفية لإنتاج الصورة عالية الدقة */
+    .hidden-container {
+      position: absolute;
+      top: -9999px;
+      left: -9999px;
+      width: 4168px;
+      height: 5209px;
+      background: url('eid_card.jpg') center center no-repeat;
+      background-size: cover;
+    }
+    .name {
+      position: absolute;
+      top: 3520px;
+      left: 50%;
+      transform: translateX(-50%);
+      color: #f7f6da;
+      font-weight: 500;
+      text-shadow: 2px 2px 5px rgba(0,0,0,0.6);
+      font-size: 120px;
+      white-space: nowrap;
+      overflow: hidden;
+      max-width: 2000px;
+      text-align: center;
     }
   </style>
 </head>
 <body>
-  <h2>أدخل اسمك لتحميل بطاقة المعايدة</h2>
-  <input type="text" id="employeeName" placeholder="أدخل اسمك">
-  <button onclick="generateCard()">تحميل الصورة</button>
+  <div class="main-container">
+    <!-- الشعار في الوسط -->
+    <img src="company_logo.png" alt="شعار الشركة" class="company-logo">
 
-  <!-- الحاوية الكبيرة الوحيدة المخفية -->
+    <h2>أدخل اسمك لتحميل بطاقة المعايدة</h2>
+
+    <!-- المدخل والزر بشكل رأسي -->
+    <div class="input-group">
+      <input type="text" id="employeeName" placeholder="أدخل اسمك">
+      <button onclick="generateCard()">تحميل الصورة</button>
+    </div>
+  </div>
+
+  <!-- الحاوية المخفية -->
   <div class="hidden-container" id="hiddenContainer">
     <div class="name" id="nameDisplay">اسم الموظف</div>
   </div>
 
-  <!-- مكتبة html2canvas -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
   <script>
-    /**
-     * دالة لتصغير حجم النص تلقائيًا عند طول الاسم الكبير
-     */
     function adjustFontSize(element, maxWidth) {
-      let fontSize = 120;  // حجم البداية
+      let fontSize = 120;
       const minFontSize = 12; 
       const context = document.createElement("canvas").getContext("2d");
 
@@ -93,18 +144,14 @@
         return;
       }
 
-      // ضع الاسم في العنصر المخفي
       const nameDisplay = document.getElementById("nameDisplay");
       nameDisplay.textContent = nameValue;
-
-      // صغر الخط إذا كان طويلًا
       adjustFontSize(nameDisplay, 2000);
 
-      // التقط صورة الحاوية المخفية
       const hiddenContainer = document.getElementById("hiddenContainer");
       setTimeout(() => {
         html2canvas(hiddenContainer, {
-          scale: 2, 
+          scale: 2,
           useCORS: true,
           allowTaint: true
         }).then(canvas => {
@@ -113,7 +160,7 @@
           link.href = canvas.toDataURL("image/png");
           link.click();
         }).catch(error => {
-          console.error("خطأ:", error);
+          console.error("حدث خطأ:", error);
           alert("حدث خطأ أثناء تحميل الصورة.");
         });
       }, 300);
@@ -121,6 +168,7 @@
   </script>
 </body>
 </html>
+
 
 
 
