@@ -3,46 +3,52 @@
 <head>
   <meta charset="UTF-8">
   <title>بطاقة المعايدة</title>
-  <!-- خط IBM Plex Sans Arabic -->
+  <!-- هام للعرض على الجوال -->
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
   <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@500&display=swap" rel="stylesheet">
   <style>
-    /* إعدادات الصفحة العامة */
     html, body {
       margin: 0;
       padding: 0;
-      height: 100%; /* لتمكين الـflex العمودي */
-      background-color: #161616; /* اللون الخلفي الداكن */
-      color: #fff; /* النص أبيض */
+      height: 100%; 
+      background-color: #161616;
+      color: #fff;
       font-family: 'IBM Plex Sans Arabic', sans-serif;
       text-align: center;
     }
 
-    /* الحاوية الرئيسية التي ستتمركز وسط الصفحة */
     .main-container {
       display: flex;
-      flex-direction: column;      /* ترتيب عمودي */
-      align-items: center;         /* توسيط أفقي */
-      justify-content: center;     /* توسيط عمودي */
-      height: 100vh;               /* تملأ طول الصفحة كاملة */
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      /* نجعل العرض قابلاً للتمدد والمحافظة على حد أقصى */
+      width: 100%;
+      max-width: 600px; 
+      margin: 0 auto; 
+      padding: 20px;
+      min-height: 100vh; /* ليظهر في منتصف الشاشة عمودياً */
     }
 
     /* الشعار */
     .company-logo {
       height: 60px;
-      margin-bottom: 20px; /* مسافة أسفل الشعار */
+      margin-bottom: 20px;
     }
 
     h2 {
-      margin: 0 0 15px 0;
+      margin: 0 0 15px;
     }
 
-    /* عنصر الإدخال والزر في كتلة عمودية واحدة */
+    /* ترتيب عمودي للإدخال والزر */
     .input-group {
       display: flex;
-      flex-direction: column; /* ترتيب رأسي بدلاً من أفقي */
-      gap: 10px;              /* مسافة بين العناصر */
+      flex-direction: column;
+      gap: 10px;
       width: 100%;
-      max-width: 300px;       /* لجعل الإدخال والزر بعرض محدد */
+      max-width: 300px; /* للحقول نفسها */
+      margin: 0 auto;
     }
 
     input[type="text"] {
@@ -52,7 +58,7 @@
       border: 1px solid #ccc;
       outline: none;
       transition: border-color 0.3s;
-      text-align: center;       /* لجعل النص في المنتصف داخليًا */
+      text-align: center;
     }
     input[type="text"]:focus {
       border-color: #f7f6da;
@@ -76,7 +82,7 @@
       transform: scale(1);
     }
 
-    /* الحاوية الكبيرة المخفية لإنتاج الصورة عالية الدقة */
+    /* الحاوية الكبيرة المخفية */
     .hidden-container {
       position: absolute;
       top: -9999px;
@@ -104,19 +110,16 @@
 </head>
 <body>
   <div class="main-container">
-    <!-- الشعار في الوسط -->
-    <img src="company_logo.svg" alt="شعار الشركة" class="company-logo">
+    <img src="company_logo.png" alt="شعار الشركة" class="company-logo">
 
     <h2>أدخل اسمك لتحميل بطاقة المعايدة</h2>
 
-    <!-- المدخل والزر بشكل رأسي -->
     <div class="input-group">
       <input type="text" id="employeeName" placeholder="أدخل اسمك">
       <button onclick="generateCard()">تحميل الصورة</button>
     </div>
   </div>
 
-  <!-- الحاوية المخفية -->
   <div class="hidden-container" id="hiddenContainer">
     <div class="name" id="nameDisplay">اسم الموظف</div>
   </div>
@@ -168,6 +171,7 @@
   </script>
 </body>
 </html>
+
 
 
 
