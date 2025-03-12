@@ -3,15 +3,14 @@
 <head>
   <meta charset="UTF-8">
   <title>بطاقة المعايدة</title>
-  <!-- هام للعرض على الجوال -->
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
   <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@500&display=swap" rel="stylesheet">
   <style>
+    /* تهيئة الصفحة */
     html, body {
       margin: 0;
       padding: 0;
-      height: 100%; 
+      height: 100%;
       background-color: #161616;
       color: #fff;
       font-family: 'IBM Plex Sans Arabic', sans-serif;
@@ -23,15 +22,13 @@
       flex-direction: column;
       align-items: center;
       justify-content: center;
-      /* نجعل العرض قابلاً للتمدد والمحافظة على حد أقصى */
       width: 100%;
-      max-width: 600px; 
-      margin: 0 auto; 
+      max-width: 600px;
+      margin: 0 auto;
       padding: 20px;
-      min-height: 100vh; /* ليظهر في منتصف الشاشة عمودياً */
+      min-height: 100vh;
     }
 
-    /* الشعار */
     .company-logo {
       height: 60px;
       margin-bottom: 20px;
@@ -41,13 +38,12 @@
       margin: 0 0 15px;
     }
 
-    /* ترتيب عمودي للإدخال والزر */
     .input-group {
       display: flex;
       flex-direction: column;
       gap: 10px;
       width: 100%;
-      max-width: 300px; /* للحقول نفسها */
+      max-width: 300px;
       margin: 0 auto;
     }
 
@@ -82,53 +78,78 @@
       transform: scale(1);
     }
 
-    /* الحاوية الكبيرة المخفية */
     .hidden-container {
       position: absolute;
       top: -9999px;
       left: -9999px;
-      width: 4168px;
-      height: 5209px;
-      background: url('eid_card.jpg') center center no-repeat;
-      background-size: cover;
+      width: 1080px; /* تم تقليل الحجم */
+      height: 1350px; /* تم تقليل الحجم */
+      background-color: #161616;
+      overflow: hidden;
     }
+    
+    .background-image {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+    
     .name {
       position: absolute;
-      top: 3520px;
-      left: 50%;
-      transform: translateX(-50%);
+      top: 900px; /* الموضع الرأسي */
+      left: 50%; /* الموضع الأفقي */
+      transform: translateX(-50%); /* لتوسيط النص أفقيًا */
       color: #f7f6da;
       font-weight: 500;
       text-shadow: 2px 2px 5px rgba(0,0,0,0.6);
       font-size: 120px;
       white-space: nowrap;
       overflow: hidden;
-      max-width: 2000px;
+      max-width: 1000px; /* عرض أقصى للنص */
       text-align: center;
+      z-index: 2;
+    }
+    
+    .loader {
+      display: none;
+      margin-top: 20px;
+      border: 4px solid #f3f3f3;
+      border-top: 4px solid #f7f6da;
+      border-radius: 50%;
+      width: 30px;
+      height: 30px;
+      animation: spin 1s linear infinite;
+    }
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
     }
   </style>
 </head>
 <body>
   <div class="main-container">
-    <img src="company_logo.png" alt="شعار الشركة" class="company-logo">
-
+    <img src="company_logo.svg" alt="شعار الشركة" class="company-logo">
     <h2>أدخل اسمك لتحميل بطاقة المعايدة</h2>
-
     <div class="input-group">
       <input type="text" id="employeeName" placeholder="أدخل اسمك">
       <button onclick="generateCard()">تحميل الصورة</button>
     </div>
+    <div id="loader" class="loader"></div>
   </div>
 
   <div class="hidden-container" id="hiddenContainer">
+    <img src="eid_card.jpg" alt="خلفية بطاقة المعايدة" class="background-image" crossorigin="anonymous">
     <div class="name" id="nameDisplay">اسم الموظف</div>
   </div>
 
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/dom-to-image/2.6.0/dom-to-image.min.js"></script>
   <script>
     function adjustFontSize(element, maxWidth) {
       let fontSize = 120;
-      const minFontSize = 12; 
+      const minFontSize = 12;
       const context = document.createElement("canvas").getContext("2d");
 
       while (fontSize >= minFontSize) {
@@ -140,39 +161,79 @@
       element.style.fontSize = fontSize + 'px';
     }
 
-    function generateCard() {
+    function saveImage(imageUrl, nameValue) {
+      if (navigator.userAgent.match(/iPhone|iPad|iPod/i)) {
+        const newWindow = window.open();
+        if (newWindow) {
+          newWindow.document.write(`
+            <html>
+              <body>
+                <p style="text-align:center; font-family:Arial;">اضغط مطولاً على الصورة واختر "حفظ الصورة"</p>
+                <img src="${imageUrl}" style="max-width:100%">
+              </body>
+            </html>
+          `);
+        } else {
+          alert("تعذر فتح نافذة جديدة. الرجاء المحاولة يدويًا.");
+        }
+      } else {
+        const link = document.createElement('a');
+        link.download = `معايدة_${nameValue}.png`;
+        link.href = imageUrl;
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+      }
+      document.getElementById("loader").style.display = "none";
+    }
+
+    function loadImage(url) {
+      return new Promise((resolve, reject) => {
+        const img = new Image();
+        img.src = url;
+        img.onload = () => resolve(img);
+        img.onerror = () => reject(new Error("فشل تحميل الصورة"));
+      });
+    }
+
+    async function generateCard() {
       const nameValue = document.getElementById("employeeName").value.trim();
       if (!nameValue) {
         alert("الرجاء إدخال اسمك!");
         return;
       }
 
+      document.getElementById("loader").style.display = "block";
+
       const nameDisplay = document.getElementById("nameDisplay");
       nameDisplay.textContent = nameValue;
-      adjustFontSize(nameDisplay, 2000);
+      adjustFontSize(nameDisplay, 1000);
 
       const hiddenContainer = document.getElementById("hiddenContainer");
-      setTimeout(() => {
-        html2canvas(hiddenContainer, {
-          scale: 2,
-          useCORS: true,
-          allowTaint: true
-        }).then(canvas => {
-          const link = document.createElement('a');
-          link.download = `معايدة_${nameValue}.png`;
-          link.href = canvas.toDataURL("image/png");
-          link.click();
-        }).catch(error => {
-          console.error("حدث خطأ:", error);
-          alert("حدث خطأ أثناء تحميل الصورة.");
-        });
-      }, 300);
+      hiddenContainer.style.position = "fixed";
+      hiddenContainer.style.top = "0";
+      hiddenContainer.style.left = "0";
+      hiddenContainer.style.zIndex = "-1";
+
+      try {
+        await loadImage("eid_card.jpg");
+
+        const dataUrl = await domtoimage.toPng(hiddenContainer);
+        saveImage(dataUrl, nameValue);
+
+      } catch (error) {
+        console.error("حدث خطأ:", error);
+        alert("حدث خطأ أثناء توليد الصورة: " + error.message);
+      } finally {
+        hiddenContainer.style.position = "absolute";
+        hiddenContainer.style.top = "-9999px";
+        hiddenContainer.style.left = "-9999px";
+        document.getElementById("loader").style.display = "none";
+      }
     }
   </script>
 </body>
 </html>
-
-
 
 
 
