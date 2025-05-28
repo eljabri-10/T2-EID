@@ -3,11 +3,8 @@
 <head>
   <meta charset="UTF-8">
   <title>بطاقة المعايدة</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <!-- خط IBM Plex Sans Arabic -->
-  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@500&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@600&display=swap" rel="stylesheet">
   <style>
-    /* خلفية الصفحة وأسلوب عام */
     html, body {
       margin: 0;
       padding: 0;
@@ -17,113 +14,176 @@
       font-family: 'IBM Plex Sans Arabic', sans-serif;
       text-align: center;
     }
+
     .main-container {
       display: flex;
       flex-direction: column;
       align-items: center;
       justify-content: center;
-      width: 100%;
-      max-width: 600px;
-      margin: 0 auto;
-      padding: 20px;
-      min-height: 100vh;
+      height: 100vh;
+      padding: 10px;
     }
+
     .company-logo {
       height: 60px;
       margin-bottom: 20px;
     }
+
     h2 {
-      margin: 0 0 15px;
+      margin: 0 0 15px 0;
+      font-size: 1.5rem;
     }
+
     .input-group {
       display: flex;
       flex-direction: column;
       gap: 10px;
-      width: 100%;
-      max-width: 300px;
-      margin: 0 auto;
+      width: 80%;
+      max-width: 400px;
+      align-items: center;
     }
-    input[type="text"] {
-      padding: 12px 15px;
-      font-size: 16px;
+
+    input[type="text"], button {
+      padding: 15px;
+      font-size: 1.2rem;
       border-radius: 5px;
       border: 1px solid #ccc;
       outline: none;
       text-align: center;
-      transition: border-color 0.3s;
+      width: 100%;
+      box-sizing: border-box;
     }
-    input[type="text"]:focus {
-      border-color: #f7f6da;
-    }
+
     button {
-      padding: 12px 20px;
-      font-size: 16px;
       background-color: #f7f6da;
       color: #000;
       border: none;
       cursor: pointer;
-      border-radius: 5px;
-      transition: background-color 0.3s, transform 0.2s;
-    }
-    button:hover {
-      background-color: #e3e2c8;
-      transform: scale(1.02);
-    }
-    button:active {
-      transform: scale(1);
     }
 
-    /* الحاوية الكبيرة المخفية - بنفس الأبعاد الأصلية */
+    button:hover {
+      background-color: #e3e2c8;
+    }
+
+    .design-options {
+      display: flex;
+      gap: 10px;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+
+    .design-thumb {
+      width: 120px;
+      height: auto;
+      cursor: pointer;
+      border: 3px solid transparent;
+      border-radius: 10px;
+      transition: 0.3s;
+    }
+
+    .design-thumb.selected {
+      border-color: #269b55;
+      box-shadow: 0 0 10px #269b55;
+    }
+
     .hidden-container {
       position: absolute;
       top: -9999px;
       left: -9999px;
-      width: 4168px;
-      height: 5209px;
-      background: url('eid_card.jpg') center center no-repeat;
+      width: 1080px;
+      height: 1350px;
+      overflow: hidden;
+      background-repeat: no-repeat;
+      background-position: center center;
       background-size: cover;
     }
+
+    .design1 {
+      background-image: url('https://i.imgur.com/WkGmC7M.png');
+    }
+
+    .design2 {
+      background-image: url('https://i.imgur.com/fhtT56F.png');
+    }
+
     .name {
       position: absolute;
-      top: 3520px;
       left: 50%;
       transform: translateX(-50%);
-      color: #f7f6da;
-      font-weight: 500;
-      text-shadow: 2px 2px 5px rgba(0,0,0,0.6);
-      font-size: 120px;
-      white-space: nowrap;
-      overflow: hidden;
-      max-width: 2000px;
+      top: 955px;
+      color: #269b55;
+      font-family: 'IBM Plex Sans Arabic', sans-serif;
+      font-weight: 600;
+      font-size: 30px;
+      max-width: 500px;
       text-align: center;
+      line-height: 1.2;
+      background: transparent;
+      box-shadow: none;
+      border: none;
+      padding: 0;
+    }
+
+    .image-preview {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+      background: rgba(0,0,0,0.8);
+      z-index: 1000;
     }
   </style>
 </head>
 <body>
   <div class="main-container">
-    <img src="company_logo.png" alt="شعار الشركة" class="company-logo">
-    <h2>أدخل اسمك لتحميل بطاقة المعايدة</h2>
+    <img src="https://i.imgur.com/W7i90r5.png" alt="شعار الشركة" class="company-logo">
+    <h2>أدخل اسمك واختر تصميم المعايدة</h2>
     <div class="input-group">
       <input type="text" id="employeeName" placeholder="أدخل اسمك">
+      <div class="design-options">
+        <img src="https://i.imgur.com/WkGmC7M.png" class="design-thumb selected" data-design="design1" alt="تصميم 1">
+        <img src="https://i.imgur.com/fhtT56F.png" class="design-thumb" data-design="design2" alt="تصميم 2">
+      </div>
       <button onclick="generateCard()">تحميل الصورة</button>
     </div>
   </div>
 
-  <!-- حاوية كبيرة مخفية -->
-  <div class="hidden-container" id="hiddenContainer">
+  <div class="hidden-container design1" id="hiddenContainer">
     <div class="name" id="nameDisplay">اسم الموظف</div>
   </div>
 
   <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
   <script>
+    let selectedDesign = "design1";
+
+    document.querySelectorAll('.design-thumb').forEach(img => {
+      img.addEventListener('click', () => {
+        document.querySelectorAll('.design-thumb').forEach(i => i.classList.remove('selected'));
+        img.classList.add('selected');
+        selectedDesign = img.dataset.design;
+      });
+    });
+
+    function preloadImage(url) {
+      return new Promise((resolve, reject) => {
+        const img = new Image();
+        img.crossOrigin = "Anonymous";
+        img.onload = () => resolve(img);
+        img.onerror = () => reject(new Error(`فشل تحميل الصورة: ${url}`));
+        img.src = url;
+      });
+    }
+
     function adjustFontSize(element, maxWidth) {
-      let fontSize = 120;
-      const minFontSize = 12; 
-      const ctx = document.createElement("canvas").getContext("2d");
+      let fontSize = 30;
+      const minFontSize = 12;
+      const context = document.createElement("canvas").getContext("2d");
 
       while (fontSize >= minFontSize) {
-        ctx.font = `500 ${fontSize}px IBM Plex Sans Arabic`;
-        const textWidth = ctx.measureText(element.textContent).width;
+        context.font = `600 ${fontSize}px IBM Plex Sans Arabic`;
+        const textWidth = context.measureText(element.textContent).width;
         if (textWidth <= maxWidth) break;
         fontSize--;
       }
@@ -137,54 +197,52 @@
         return;
       }
 
-      // 1) ضع الاسم في الحاوية الكبيرة
-      const nameDisplay = document.getElementById("nameDisplay");
-      nameDisplay.textContent = nameValue;
-      adjustFontSize(nameDisplay, 2000);
-
       const hiddenContainer = document.getElementById("hiddenContainer");
+      const nameDisplay = document.getElementById("nameDisplay");
+
+      hiddenContainer.className = 'hidden-container ' + selectedDesign;
+      nameDisplay.className = 'name';
+      nameDisplay.textContent = nameValue;
+      adjustFontSize(nameDisplay, 500);
+
+      const imageUrls = {
+        design1: 'https://i.imgur.com/WkGmC7M.png',
+        design2: 'https://i.imgur.com/fhtT56F.png'
+      };
 
       try {
-        // 2) التقط الصورة الكبيرة بـ scale=1 لتقليل الحجم
-        const bigCanvas = await html2canvas(hiddenContainer, {
-          scale: 1,        // مهم: نقلل scale حتى لا يصبح الـCanvas هائل
+        await preloadImage(imageUrls[selectedDesign]);
+        await preloadImage('https://i.imgur.com/W7i90r5.png');
+        await new Promise(resolve => setTimeout(resolve, 500));
+
+        const canvas = await html2canvas(hiddenContainer, {
+          scale: 3,
           useCORS: true,
-          allowTaint: true
+          allowTaint: true,
+          backgroundColor: null
         });
 
-        // 3) الآن نصغّرها إلى 600×750 (نفس النسبة الأصلية ~ 0.8)
-        // لاحظ: 600×750 < 4096 في كلا البعدين
-        const finalWidth = 600;  
-        const finalHeight = 750; 
+        const imgData = canvas.toDataURL("image/png", 1.0);
+        if (imgData.length < 1000) throw new Error("الصورة الناتجة فارغة أو غير صالحة");
 
-        const smallCanvas = document.createElement('canvas');
-        smallCanvas.width = finalWidth;
-        smallCanvas.height = finalHeight;
+        const imgPreview = document.createElement('img');
+        imgPreview.src = imgData;
+        imgPreview.className = "image-preview";
+        document.body.innerHTML = '';
+        document.body.appendChild(imgPreview);
 
-        const ctx = smallCanvas.getContext('2d');
-        // نرسم الـbigCanvas في الـsmallCanvas لتصغيره
-        ctx.drawImage(bigCanvas, 0, 0, finalWidth, finalHeight);
-
-        // 4) نحولها إلى JPEG بجودة 0.7 لتقليل الحجم
-        const finalURL = smallCanvas.toDataURL("image/jpeg", 0.7);
-
-        // 5) إنشاء رابط التحميل
-        const link = document.createElement('a');
-        link.download = `معايدة_${nameValue}.jpg`;
-        link.href = finalURL;
-        link.click();
-
+        if (/iPhone|iPad|iPod/i.test(navigator.userAgent)) {
+          alert("تم إنشاء الصورة! يمكنك حفظها يدويًا بالضغط مطولًا عليها.");
+        } else {
+          const link = document.createElement('a');
+          link.download = `معايدة_${nameValue}.png`;
+          link.href = imgData;
+          link.click();
+        }
       } catch (error) {
-        console.error("حدث خطأ:", error);
-        alert("حدث خطأ أثناء توليد الصورة.");
+        alert("حدث خطأ أثناء تحميل الصورة: " + error.message);
       }
     }
   </script>
 </body>
 </html>
-
-
-
-
-
-
