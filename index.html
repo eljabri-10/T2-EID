@@ -2,7 +2,7 @@
 <html lang="ar">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"> 
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>بطاقة المعايدة</title>
   <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@600&display=swap" rel="stylesheet">
   <style>
@@ -14,6 +14,7 @@
       font-family: 'IBM Plex Sans Arabic', sans-serif;
       text-align: center;
     }
+
     .main-container {
       display: flex;
       flex-direction: column;
@@ -23,14 +24,17 @@
       padding: 30px 10px;
       box-sizing: border-box;
     }
+
     .company-logo {
       height: 60px;
       margin-bottom: 20px;
     }
+
     h2 {
       margin: 0 0 15px 0;
       font-size: 1.5rem;
     }
+
     .input-group {
       display: flex;
       flex-direction: column;
@@ -39,6 +43,7 @@
       max-width: 400px;
       align-items: center;
     }
+
     input[type="text"], button {
       padding: 15px;
       font-size: 1.2rem;
@@ -49,21 +54,25 @@
       width: 100%;
       box-sizing: border-box;
     }
+
     button {
       background-color: #f7f6da;
       color: #000;
       border: none;
       cursor: pointer;
     }
+
     button:hover {
       background-color: #e3e2c8;
     }
+
     .design-options {
       display: flex;
       gap: 10px;
       justify-content: center;
       flex-wrap: wrap;
     }
+
     .design-thumb {
       width: 120px;
       height: auto;
@@ -72,10 +81,12 @@
       border-radius: 10px;
       transition: 0.3s;
     }
+
     .design-thumb.selected {
       border-color: #269b55;
       box-shadow: 0 0 10px #269b55;
     }
+
     .hidden-container {
       position: absolute;
       top: -9999px;
@@ -87,18 +98,21 @@
       background-position: center center;
       background-size: cover;
     }
+
     .design1 {
       background-image: url('https://i.imgur.com/RDOiRCN.jpeg');
     }
+
     .design2 {
       background-image: url('https://i.imgur.com/W657nUY.jpeg');
     }
+
     .name {
       position: absolute;
       left: 50%;
       transform: translateX(-50%);
-      top: 955px;
-      color: #269b55;
+      top: 400px; /* عدل حسب مكان النص المطلوب */
+      color: #f7f6da; /* ✅ لون النص الجديد */
       font-family: 'IBM Plex Sans Arabic', sans-serif;
       font-weight: 600;
       font-size: 30px;
@@ -110,6 +124,7 @@
       border: none;
       padding: 0;
     }
+
     .image-preview {
       position: fixed;
       top: 0;
@@ -120,6 +135,7 @@
       background: rgba(0,0,0,0.8);
       z-index: 1000;
     }
+
     @media (max-width: 600px) {
       h2 { font-size: 1.2rem; }
       input[type="text"], button { font-size: 1rem; padding: 12px; }
@@ -238,5 +254,7 @@
   </script>
 </body>
 </html>
+
+
 
 
