@@ -2,7 +2,7 @@
 <html lang="ar">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"> <!-- ✅ مهم للهواتف -->
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"> 
   <title>بطاقة المعايدة</title>
   <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@600&display=swap" rel="stylesheet">
   <style>
@@ -14,36 +14,31 @@
       font-family: 'IBM Plex Sans Arabic', sans-serif;
       text-align: center;
     }
-
     .main-container {
       display: flex;
       flex-direction: column;
       align-items: center;
       justify-content: center;
-      min-height: 100vh; /* ✅ بدلاً من height: 100vh */
+      min-height: 100vh;
       padding: 30px 10px;
       box-sizing: border-box;
     }
-
     .company-logo {
       height: 60px;
       margin-bottom: 20px;
     }
-
     h2 {
       margin: 0 0 15px 0;
       font-size: 1.5rem;
     }
-
     .input-group {
       display: flex;
       flex-direction: column;
       gap: 10px;
-      width: 100%; /* ✅ بدلاً من 80% */
+      width: 100%;
       max-width: 400px;
       align-items: center;
     }
-
     input[type="text"], button {
       padding: 15px;
       font-size: 1.2rem;
@@ -54,25 +49,21 @@
       width: 100%;
       box-sizing: border-box;
     }
-
     button {
       background-color: #f7f6da;
       color: #000;
       border: none;
       cursor: pointer;
     }
-
     button:hover {
       background-color: #e3e2c8;
     }
-
     .design-options {
       display: flex;
       gap: 10px;
       justify-content: center;
       flex-wrap: wrap;
     }
-
     .design-thumb {
       width: 120px;
       height: auto;
@@ -81,12 +72,10 @@
       border-radius: 10px;
       transition: 0.3s;
     }
-
     .design-thumb.selected {
       border-color: #269b55;
       box-shadow: 0 0 10px #269b55;
     }
-
     .hidden-container {
       position: absolute;
       top: -9999px;
@@ -98,20 +87,17 @@
       background-position: center center;
       background-size: cover;
     }
-
     .design1 {
-      background-image: url('https://i.imgur.com/WkGmC7M.png');
+      background-image: url('https://i.imgur.com/RDOiRCN.jpeg');
     }
-
     .design2 {
-      background-image: url('https://i.imgur.com/fhtT56F.png');
+      background-image: url('https://i.imgur.com/W657nUY.jpeg');
     }
-
     .name {
       position: absolute;
       left: 50%;
       transform: translateX(-50%);
-      top: 955px; /* 🔼 عدلها حسب المكان المناسب في التصميم */
+      top: 955px;
       color: #269b55;
       font-family: 'IBM Plex Sans Arabic', sans-serif;
       font-weight: 600;
@@ -124,7 +110,6 @@
       border: none;
       padding: 0;
     }
-
     .image-preview {
       position: fixed;
       top: 0;
@@ -135,28 +120,12 @@
       background: rgba(0,0,0,0.8);
       z-index: 1000;
     }
-
     @media (max-width: 600px) {
-      h2 {
-        font-size: 1.2rem;
-      }
-
-      input[type="text"], button {
-        font-size: 1rem;
-        padding: 12px;
-      }
-
-      .design-thumb {
-        width: 100px;
-      }
-
-      .company-logo {
-        height: 50px;
-      }
-
-      .main-container {
-        padding: 20px;
-      }
+      h2 { font-size: 1.2rem; }
+      input[type="text"], button { font-size: 1rem; padding: 12px; }
+      .design-thumb { width: 100px; }
+      .company-logo { height: 50px; }
+      .main-container { padding: 20px; }
     }
   </style>
 </head>
@@ -167,8 +136,8 @@
     <div class="input-group">
       <input type="text" id="employeeName" placeholder="أدخل اسمك">
       <div class="design-options">
-        <img src="https://i.imgur.com/WkGmC7M.png" class="design-thumb selected" data-design="design1" alt="تصميم 1">
-        <img src="https://i.imgur.com/fhtT56F.png" class="design-thumb" data-design="design2" alt="تصميم 2">
+        <img src="https://i.imgur.com/RDOiRCN.jpeg" class="design-thumb selected" data-design="design1" alt="تصميم 1">
+        <img src="https://i.imgur.com/W657nUY.jpeg" class="design-thumb" data-design="design2" alt="تصميم 2">
       </div>
       <button onclick="generateCard()">تحميل الصورة</button>
     </div>
@@ -204,7 +173,6 @@
       let fontSize = 30;
       const minFontSize = 12;
       const context = document.createElement("canvas").getContext("2d");
-
       while (fontSize >= minFontSize) {
         context.font = `600 ${fontSize}px IBM Plex Sans Arabic`;
         const textWidth = context.measureText(element.textContent).width;
@@ -230,8 +198,8 @@
       adjustFontSize(nameDisplay, 500);
 
       const imageUrls = {
-        design1: 'https://i.imgur.com/WkGmC7M.png',
-        design2: 'https://i.imgur.com/fhtT56F.png'
+        design1: 'https://i.imgur.com/RDOiRCN.jpeg',
+        design2: 'https://i.imgur.com/W657nUY.jpeg'
       };
 
       try {
@@ -270,3 +238,5 @@
   </script>
 </body>
 </html>
+
+
