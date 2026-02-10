@@ -4,8 +4,19 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>بطاقة المعايدة</title>
+
+  <!-- خطوط -->
   <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@600&display=swap" rel="stylesheet">
+
   <style>
+    /* تحميل خط الموظف فقط */
+    @font-face {
+      font-family: 'GuessWhat';
+      src: url('Guesswhat-Exceptional.woff2') format('woff2');
+      font-weight: normal;
+      font-style: normal;
+    }
+
     html, body {
       margin: 0;
       padding: 0;
@@ -87,6 +98,7 @@
       box-shadow: 0 0 10px #269b55;
     }
 
+    /* الحاوية المخفية لتوليد الصورة */
     .hidden-container {
       position: absolute;
       top: -9999px;
@@ -107,15 +119,16 @@
       background-image: url('https://i.imgur.com/W657nUY.jpeg');
     }
 
+    /* نص الموظف بخط GuessWhat */
     .name {
       position: absolute;
       left: 50%;
       transform: translateX(-50%);
-      top: 451px; /* عدل حسب مكان النص المطلوب */
-      color: #f7f6da; /* ✅ لون النص الجديد */
-      font-family: 'IBM Plex Sans Arabic', sans-serif;
-      font-weight: 500;
-      font-size: 20px;
+      top: 955px; 
+      color: #f7f6da; 
+      font-family: 'GuessWhat', sans-serif; /* ✅ الخط الجديد للموظف فقط */
+      font-weight: 600;
+      font-size: 30px;
       max-width: 500px;
       text-align: center;
       line-height: 1.2;
@@ -148,7 +161,7 @@
 <body>
   <div class="main-container">
     <img src="https://i.imgur.com/W7i90r5.png" alt="شعار الشركة" class="company-logo">
-    <h2>أدخل اسمك واختر تصميم التهنئة</h2>
+    <h2>أدخل اسمك واختر تصميم المعايدة</h2>
     <div class="input-group">
       <input type="text" id="employeeName" placeholder="أدخل اسمك">
       <div class="design-options">
@@ -190,7 +203,7 @@
       const minFontSize = 12;
       const context = document.createElement("canvas").getContext("2d");
       while (fontSize >= minFontSize) {
-        context.font = `600 ${fontSize}px IBM Plex Sans Arabic`;
+        context.font = `600 ${fontSize}px GuessWhat`;
         const textWidth = context.measureText(element.textContent).width;
         if (textWidth <= maxWidth) break;
         fontSize--;
@@ -254,6 +267,8 @@
   </script>
 </body>
 </html>
+
+
 
 
 
