@@ -4,10 +4,10 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>بطاقة المعايدة</title>
- 
+
   <!-- خطوط -->
   <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@600&display=swap" rel="stylesheet">
- 
+
   <style>
     @font-face {
       font-family: 'GuessWhat';
@@ -15,16 +15,16 @@
       font-weight: normal;
       font-style: normal;
     }
- 
+
     html, body {
       margin: 0;
       padding: 0;
-      background-color: #f7f6da;
-      color: #000;
+      background-color: #f7f6da; /* ✅ خلفية بيج */
+      color: #000; /* نصوص عامة بالأسود لتكون واضحة على البيج */
       font-family: 'IBM Plex Sans Arabic', sans-serif;
       text-align: center;
     }
- 
+
     .main-container {
       display: flex;
       flex-direction: column;
@@ -34,17 +34,18 @@
       padding: 30px 10px;
       box-sizing: border-box;
     }
- 
+
     .company-logo {
       height: 60px;
       margin-bottom: 20px;
     }
- 
+
     h2 {
       margin: 0 0 15px 0;
       font-size: 1.5rem;
+      color: #000; /* نص العنوان أسود على الخلفية البيج */
     }
- 
+
     .input-group {
       display: flex;
       flex-direction: column;
@@ -53,7 +54,7 @@
       max-width: 400px;
       align-items: center;
     }
- 
+
     input[type="text"], button {
       padding: 15px;
       font-size: 1.2rem;
@@ -64,25 +65,25 @@
       width: 100%;
       box-sizing: border-box;
     }
- 
+
     button {
-      background-color: #161616;
-      color: #f7f6da;
+      background-color: #161616; /* أضفنا لون داكن للزر ليظهر جيدًا على البيج */
+      color: #f7f6da; /* نص الزر باللون البيج */
       border: none;
       cursor: pointer;
     }
- 
+
     button:hover {
-      background-color: #2e2e2e;
+      background-color: #333; /* داكن أكثر عند hover */
     }
- 
+
     .design-options {
       display: flex;
       gap: 10px;
       justify-content: center;
       flex-wrap: wrap;
     }
- 
+
     .design-thumb {
       width: 120px;
       height: auto;
@@ -91,12 +92,12 @@
       border-radius: 10px;
       transition: 0.3s;
     }
- 
+
     .design-thumb.selected {
       border-color: #269b55;
       box-shadow: 0 0 10px #269b55;
     }
- 
+
     .hidden-container {
       position: absolute;
       top: -9999px;
@@ -108,15 +109,15 @@
       background-position: center center;
       background-size: cover;
     }
- 
+
     .design1 {
-      background-image: url('https://i.imgur.com/dJF3xQ5.png');
+      background-image: url('https://i.imgur.com/dJF3xQ5.png'); /* التصميم الجديد 1 */
     }
- 
+
     .design2 {
-      background-image: url('https://i.imgur.com/hOSRxHw.png');
+      background-image: url('https://i.imgur.com/hOSRxHw.png'); /* التصميم الجديد 2 */
     }
- 
+
     .name {
       position: absolute;
       left: 50%;
@@ -134,7 +135,7 @@
       border: none;
       padding: 0;
     }
- 
+
     .image-preview {
       position: fixed;
       top: 0;
@@ -145,7 +146,7 @@
       background: rgba(0,0,0,0.8);
       z-index: 1000;
     }
- 
+
     @media (max-width: 600px) {
       h2 { font-size: 1.2rem; }
       input[type="text"], button { font-size: 1rem; padding: 12px; }
@@ -168,15 +169,15 @@
       <button onclick="generateCard()">تحميل الصورة</button>
     </div>
   </div>
- 
+
   <div class="hidden-container design1" id="hiddenContainer">
     <div class="name" id="nameDisplay">اسم الموظف</div>
   </div>
- 
+
   <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
   <script>
     let selectedDesign = "design1";
- 
+
     document.querySelectorAll('.design-thumb').forEach(img => {
       img.addEventListener('click', () => {
         document.querySelectorAll('.design-thumb').forEach(i => i.classList.remove('selected'));
@@ -184,7 +185,7 @@
         selectedDesign = img.dataset.design;
       });
     });
- 
+
     function preloadImage(url) {
       return new Promise((resolve, reject) => {
         const img = new Image();
@@ -194,7 +195,7 @@
         img.src = url;
       });
     }
- 
+
     function adjustFontSize(element, maxWidth) {
       let fontSize = 30;
       const minFontSize = 12;
@@ -207,48 +208,48 @@
       }
       element.style.fontSize = fontSize + 'px';
     }
- 
+
     async function generateCard() {
       const nameValue = document.getElementById("employeeName").value.trim();
       if (!nameValue) {
         alert("الرجاء إدخال اسمك!");
         return;
       }
- 
+
       const hiddenContainer = document.getElementById("hiddenContainer");
       const nameDisplay = document.getElementById("nameDisplay");
- 
+
       hiddenContainer.className = 'hidden-container ' + selectedDesign;
       nameDisplay.className = 'name';
       nameDisplay.textContent = nameValue;
       adjustFontSize(nameDisplay, 500);
- 
+
       const imageUrls = {
         design1: 'https://i.imgur.com/dJF3xQ5.png',
         design2: 'https://i.imgur.com/hOSRxHw.png'
       };
- 
+
       try {
         await preloadImage(imageUrls[selectedDesign]);
         await preloadImage('https://i.imgur.com/W7i90r5.png');
         await new Promise(resolve => setTimeout(resolve, 500));
- 
+
         const canvas = await html2canvas(hiddenContainer, {
           scale: 3,
           useCORS: true,
           allowTaint: true,
           backgroundColor: null
         });
- 
+
         const imgData = canvas.toDataURL("image/png", 1.0);
         if (imgData.length < 1000) throw new Error("الصورة الناتجة فارغة أو غير صالحة");
- 
+
         const imgPreview = document.createElement('img');
         imgPreview.src = imgData;
         imgPreview.className = "image-preview";
         document.body.innerHTML = '';
         document.body.appendChild(imgPreview);
- 
+
         if (/iPhone|iPad|iPod/i.test(navigator.userAgent)) {
           alert("تم إنشاء الصورة! يمكنك حفظها يدويًا بالضغط مطولًا عليها.");
         } else {
@@ -264,8 +265,6 @@
   </script>
 </body>
 </html>
-
-
 
 
 
