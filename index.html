@@ -19,8 +19,8 @@
     html, body {
       margin: 0;
       padding: 0;
-      background-color: #f7f6da; /* ✅ خلفية بيج */
-      color: #000; /* نصوص عامة بالأسود لتكون واضحة على البيج */
+      background-color: #161616;
+      color: #fff;
       font-family: 'IBM Plex Sans Arabic', sans-serif;
       text-align: center;
     }
@@ -43,7 +43,6 @@
     h2 {
       margin: 0 0 15px 0;
       font-size: 1.5rem;
-      color: #000; /* نص العنوان أسود على الخلفية البيج */
     }
 
     .input-group {
@@ -67,14 +66,14 @@
     }
 
     button {
-      background-color: #161616; /* أضفنا لون داكن للزر ليظهر جيدًا على البيج */
-      color: #f7f6da; /* نص الزر باللون البيج */
+      background-color: #f7f6da;
+      color: #000;
       border: none;
       cursor: pointer;
     }
 
     button:hover {
-      background-color: #333; /* داكن أكثر عند hover */
+      background-color: #e3e2c8;
     }
 
     .design-options {
@@ -111,11 +110,11 @@
     }
 
     .design1 {
-      background-image: url('https://i.imgur.com/dJF3xQ5.png'); /* التصميم الجديد 1 */
+      background-image: url('https://i.imgur.com/CXwhaej.jpeg');
     }
 
     .design2 {
-      background-image: url('https://i.imgur.com/hOSRxHw.png'); /* التصميم الجديد 2 */
+      background-image: url('https://i.imgur.com/NzWx3FA.jpeg');
     }
 
     .name {
@@ -163,8 +162,8 @@
     <div class="input-group">
       <input type="text" id="employeeName" placeholder="أدخل اسمك">
       <div class="design-options">
-        <img src="https://i.imgur.com/dJF3xQ5.png" class="design-thumb selected" data-design="design1" alt="تصميم 1">
-        <img src="https://i.imgur.com/hOSRxHw.png" class="design-thumb" data-design="design2" alt="تصميم 2">
+        <img src="https://i.imgur.com/CXwhaej.jpeg" class="design-thumb selected" data-design="design1" alt="تصميم 1">
+        <img src="https://i.imgur.com/NzWx3FA.jpeg" class="design-thumb" data-design="design2" alt="تصميم 2">
       </div>
       <button onclick="generateCard()">تحميل الصورة</button>
     </div>
@@ -225,8 +224,8 @@
       adjustFontSize(nameDisplay, 500);
 
       const imageUrls = {
-        design1: 'https://i.imgur.com/dJF3xQ5.png',
-        design2: 'https://i.imgur.com/hOSRxHw.png'
+        design1: 'https://i.imgur.com/CXwhaej.jpeg',
+        design2: 'https://i.imgur.com/NzWx3FA.jpeg'
       };
 
       try {
