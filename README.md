@@ -1,2 +1,2 @@
-# T2-Ramadan
-T2 Eid Card Generator
+# T2-Eid al-Fitr
+T2 Eid al-Fitr
